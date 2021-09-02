@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Liquidators ChAase</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+	<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://npmcdn.com/moralis@0.0.6/dist/moralis.js"></script>
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">Liquidators ChAase</div>
+      </div>
+    </div>
+
+    <script>
+
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/Test.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/Test.data",
+        frameworkUrl: buildUrl + "/Test.framework.js",
+        codeUrl: buildUrl + "/Test.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "SSDT",
+        productName: "Liquidators ChAase",
+        productVersion: "1.0",
+      };
+
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+	  var uIns;
+	  var CurrentUser="";
+	  var Wallets;
+	  var Web3;
+	  
+
+		//Web3 Stuff Here
+		
+		Moralis.initialize("UxaY3OSHIifEwDZB7X8KaDIpznh2g7eEZeMHksZy");
+		Moralis.serverURL = "https://vigb3x3mos3p.usemoralis.com:2053/server";
+
+		
+		async function login() {
+        //user = Moralis.User.current();
+        //if (!user) {
+        //  user = await Moralis.Web3.authenticate();
+        //}
+		//if (user) {
+        //  uIns.SendMessage('Canvas/ConnectBtn','WalletConnected',user.get('ethAddress'));
+        //}
+		web3 = await Moralis.Web3.enable();
+		getCurrentWallets();
+      }
+
+      async function logOut() {
+        await Moralis.User.logOut();
+		user = '';
+		uIns.SendMessage('Canvas/ConnectBtn','WalletDisConnected');
+      }
+	  
+		async function getCurrentWallets() {
+			Wallets = await web3.eth.getAccounts();
+			uIns.SendMessage('Canvas/ConnectBtn','WalletConnected',Wallets[0].toLowerCase());
+		}
+	  
+		const unsubscribe = Moralis.Web3.onAccountsChanged(async function(accounts) {
+			//alert(JSON.stringify(accounts));
+			if (accounts[0]) {
+				uIns.SendMessage('Canvas/ConnectBtn','WalletConnected',accounts[0]);
+			} else {
+				await logOut();
+			}
+		});
+		
+		const OnConnect = Moralis.Web3.onConnect(async function(account) {
+			uIns.SendMessage('Canvas/ConnectBtn','WalletConnected',accounts[0]);
+		});
+		
+		
+		//End of Web3
+	  
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        container.className = "unity-mobile";
+        config.devicePixelRatio = 1;
+      } else {
+        canvas.style.width = "960px";
+        canvas.style.height = "600px";
+      }
+      loadingBar.style.display = "block";
+
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+		  uIns = unityInstance
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+		  
+		  login();
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+	  
+
+      // add from here down
+	
+
+    </script>
+  </body>
+</html>

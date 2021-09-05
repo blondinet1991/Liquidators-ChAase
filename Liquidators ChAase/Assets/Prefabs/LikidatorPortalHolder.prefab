@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 473237278085672137}
   - component: {fileID: 473237278085672138}
+  - component: {fileID: 7590156137264571234}
   m_Layer: 0
   m_Name: LikidatorPortalHolder
   m_TagString: Untagged
@@ -51,6 +52,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7590156137264571234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 473237278085672139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9b23e52dc06fc246b06d3d6f4a3d487, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LikidatorPrefab: {fileID: 4284144756488415201, guid: bca3c5de56e7a9d47aa0750159ffe5b0, type: 3}
+  spawnTimer: 3
 --- !u!1 &473237279309414020
 GameObject:
   m_ObjectHideFlags: 0
@@ -78,7 +93,7 @@ Transform:
   m_GameObject: {fileID: 473237279309414020}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 473237278085672137}
   m_RootOrder: 0
@@ -120,9 +135,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -2086308291
+  m_SortingLayer: 4
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: 32b8814079f579045b1807b52ec40493, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

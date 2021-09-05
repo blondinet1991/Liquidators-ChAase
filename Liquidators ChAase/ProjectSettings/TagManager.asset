@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Platforms
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -16,8 +17,8 @@ TagManager:
   - 
   - Player
   - Ground
-  - 
-  - 
+  - Enemy
+  - Traps
   - 
   - 
   - 
@@ -41,6 +42,15 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Far
+    uniqueID: 2836825483
+    locked: 0
+  - name: BG
+    uniqueID: 90360513
+    locked: 0
+  - name: Env
+    uniqueID: 358732893
     locked: 0
   - name: Player
     uniqueID: 2208659005

@@ -14,15 +14,26 @@ public class Platforms : MonoBehaviour
         platformY = transform.position.y;
     }
 
-    public void SummonOnTop(GameObject gameObject){
+    public GameObject SummonOnTop(GameObject gameObject){
         Renderer sr = null;
         if (!gameObject.transform.TryGetComponent<Renderer>(out sr))
            gameObject.transform.GetChild(0).TryGetComponent<Renderer>(out sr);
 
         if (sr != null) {
-           Instantiate(gameObject, new Vector2(transform.position.x + (Random.Range(0f, platformWidth/2)), platformY+(sr.bounds.size.y)/2), transform.rotation, transform);
+          return Instantiate(gameObject, new Vector2(transform.position.x + (Random.Range(0f, platformWidth/2)), platformY+(sr.bounds.size.y)/2), transform.rotation, transform);
         //    Debug.Log(getObjectSize(gameObject));
-        }
+        } else return null;
+     }
+
+    public GameObject SummonOnTopNonParent(GameObject gameObject){
+        Renderer sr = null;
+        if (!gameObject.transform.TryGetComponent<Renderer>(out sr))
+           gameObject.transform.GetChild(0).TryGetComponent<Renderer>(out sr);
+
+        if (sr != null) {
+          return Instantiate(gameObject, new Vector2(transform.position.x + (Random.Range(0f, platformWidth/2)), platformY+(sr.bounds.size.y)/2), transform.rotation);
+        //    Debug.Log(getObjectSize(gameObject));
+        } else return null;
      }
 
     public Vector2 getObjectSize(GameObject gameObject) {

@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D rigidbody2D=null;
 
+    public GameCore gameCore;
+
     public Transform playerSprite;
 
     public float SpeedModifer = 3.5f;
@@ -49,6 +51,8 @@ public class Player : MonoBehaviour
 
     public float aheadAmount, aheadSpeed;
 
+    public Transform currentPlayerPlatform;
+
     private void Awake() {
         rigidbody2D = GetComponent<Rigidbody2D>();
         JumpPartcilePosition = transform.Find("JumpParticlePosition");
@@ -58,9 +62,13 @@ public class Player : MonoBehaviour
         reCalcStats();
 
         attachedCamera = Instantiate(playerCameraPrefab, playerCameraPrefab.transform.position, Quaternion.identity, transform).transform;
+        attachedCamera.position = new Vector3(transform.position.x, transform.position.y, attachedCamera.position.z) ;
     }
 
-    // Update is called once per frame
+    private void Start() {
+        StartCoroutine("StartDetectPlatform");
+    }
+    
     private void FixedUpdate() {
         float ySpeed = JumpModifer;
         float xSpeed = Input.GetAxis("Horizontal") * SpeedModifer;
@@ -90,7 +98,7 @@ public class Player : MonoBehaviour
         if (isOnGroud && isJumpUsed && !SpacePressed)
             isJumpUsed = false;
 
-        if (isOnGroud && SpacePressed && !isJumpUsed) {
+        if (isOnGroud && SpacePressed && !isJumpUsed && gameCore.consumeEnergy()) {
             GameObject newJumpParticle = Instantiate(JumpParticlePrefab, JumpPartcilePosition.position, JumpPartcilePosition.rotation).gameObject;
             Destroy(newJumpParticle, 0.5f);
             rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, ySpeed);
@@ -122,11 +130,34 @@ public class Player : MonoBehaviour
             moveParticles.SetActive(false);
         }
 
-        playerSprite.rotation = new Quaternion(playerSprite.rotation.x, playerSprite.rotation.y, ((rigidbody2D.velocity.x*-8)/180f) , playerSprite.rotation.w);
+        playerSprite.rotation = new Quaternion(playerSprite.rotation.x, playerSprite.rotation.y, ((rigidbody2D.velocity.x*-15)/180f) , playerSprite.rotation.w);
     }
 
     private void reCalcStats(){
         SpeedModifer = baseSpeedModifier + ((baseSpeedModifier * (Energy/100)) * 0.3f); // benefits 30% speed from energy
         JumpModifer = BaseJumpModifer + ((BaseJumpModifer * (Energy/100)) * 0.3f); // benefits 30% jump Power from energy
     }
+
+void detectPlatform(){
+   currentPlayerPlatform = Physics2D.Raycast(transform.position, Vector3.down, 7f, groundLayer).transform;
+}
+
+IEnumerator StartDetectPlatform() 
+{
+    for(;;) 
+    {
+        detectPlatform();
+        yield return new WaitForSeconds(.1f);
+    }
+}
+
+public void finish()
+{
+
+}
+
+private void OnCollisionEnter2D(Collision2D other) {
+    if (other.transform.tag.Equals("Enemy"))
+        finish();
+}
 }
